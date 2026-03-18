@@ -17,7 +17,6 @@ contract DotYieldVault is Ownable, ReentrancyGuard {
     StrategyInfo[] public strategies;
 
     mapping(address => mapping(address => uint256)) public balances;
-
     mapping(address => mapping(uint256 => mapping(address => uint256))) public strategyBalances;
 
     // Events
@@ -32,6 +31,7 @@ contract DotYieldVault is Ownable, ReentrancyGuard {
     );
     event StrategyAdded(uint256 indexed index, address strategyAddress, string name);
     event StrategyRemoved(uint256 indexed index, address strategyAddress);
+
     event StrategyAllocated(
         address indexed user,
         uint256 indexed strategyIndex,
@@ -48,7 +48,7 @@ contract DotYieldVault is Ownable, ReentrancyGuard {
 
     constructor() Ownable(msg.sender) {}
 
-    // STRATEGY REGISTRY
+    // Add Strategy
 
     function addStrategy(
         address strategyAddress,
@@ -80,7 +80,7 @@ contract DotYieldVault is Ownable, ReentrancyGuard {
         return strategies.length;
     }
 
-    // DEPOSITS
+    // Deposit
 
     function depositERC20(address token, uint256 amount) external {
         require(token != address(0), "use native");
@@ -104,7 +104,7 @@ contract DotYieldVault is Ownable, ReentrancyGuard {
         emit Deposited(msg.sender, address(0), msg.value);
     }
 
-    // WITHDRAW
+    // Withdraw
 
     function withdrawERC20(address token, uint256 amount) external {
         require(token != address(0), "use native");
@@ -150,7 +150,7 @@ contract DotYieldVault is Ownable, ReentrancyGuard {
     emit StrategyWithdrawn(msg.sender, index, token, amount);
 }
 
-    // STRATEGY EXECUTION
+    // Strategy Execution
 
     function executeStrategy(
         uint256 index,
@@ -194,7 +194,7 @@ contract DotYieldVault is Ownable, ReentrancyGuard {
         emit StrategyAllocated(msg.sender, index, token, amount);
     }
 
-    // VIEW FUNCTIONS
+    // View function
 
     function getUserStrategyBalance(
         address user,
